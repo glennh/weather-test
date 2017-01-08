@@ -7,7 +7,7 @@ Scenario: Initial page
 
 Given I navigate to the weather page
 When I do nothing else
-Then the forecast for "Glasgow" is displayed
+Then the forecast for "Glasgowx" is displayed
 And the forecast for "5" days is displayed
 And none of the details sections are displayed
 

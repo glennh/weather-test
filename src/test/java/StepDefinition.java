@@ -67,8 +67,8 @@ public class StepDefinition {
 				list.size() > 0);
 		// Check the city
 		String city = driver.findElement(By.id("city")).getAttribute("value");
-		Assert.assertTrue("City should be " + expectedCity + "but it is "
-				+ city, city.equals(expectedCity));
+		Assert.assertTrue("City should be " + expectedCity,
+				city.equals(expectedCity));
 	}
 
 	@Then("^the forecast for \"(.*)\" days is displayed$")
