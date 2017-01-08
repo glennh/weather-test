@@ -16,6 +16,10 @@ https://github.com/buildit/acceptance-testing and updating the value of targetUr
 * git
 * maven
 * firefox
+* gecko driver
+  * https://github.com/mozilla/geckodriver/releases
+  * saved as c:\projects\gecko\geckodrver.exe for Windows
+  * or ~/projects/gecko/geckodriver for Mac
   
 ### Running the tests
 * Clone the repo to a local folder

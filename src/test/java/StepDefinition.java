@@ -22,7 +22,17 @@ public class StepDefinition {
 
 	@Before()
 	public void setup() {
+		// recent versions of firefox require the gecko driver.
+		// set the driver path based on os
+		String geckoDriverPath = "c:/projects/gecko/geckodriver.exe";
+		String os = System.getProperty("os.name");
+		if (os.contains("Mac")) {
+			geckoDriverPath = "~/projects/gecko/geckodriver";
+		}
+		System.setProperty("webdriver.gecko.driver", geckoDriverPath);
+
 		driver = new FirefoxDriver();
+
 		this.helper = new TestHelper(driver);
 	}
 
