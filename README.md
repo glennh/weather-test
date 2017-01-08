@@ -5,7 +5,7 @@ found here: https://github.com/buildit/acceptance-testing
 
 * Cucumber tests
  * in src/test/resources/weather.feature
-* Selenium used to drive Firefox browser
+* Selenium used to drive Chrome browser
 * Outputs produced in reports/test-report/
 
 The tests currently run against the public instance of the weather app at https://weather-acceptance.herokuapp.com/.  
@@ -15,11 +15,7 @@ https://github.com/buildit/acceptance-testing and updating the value of targetUr
 ### Prerequisites
 * git
 * maven
-* firefox
-* gecko driver
-  * https://github.com/mozilla/geckodriver/releases
-  * saved as c:\projects\gecko\geckodrver.exe for Windows
-  * or ~/projects/gecko/geckodriver for Mac
+* chrome browser
   
 ### Running the tests
 * Clone the repo to a local folder
