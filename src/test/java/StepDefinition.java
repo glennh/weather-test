@@ -13,8 +13,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class StepDefinition {
-	WebDriver driver;
+	private WebDriver driver;
 	private WebElement clickedDay;
+	private String targetUrl = "https://weather-acceptance.herokuapp.com/";
 
 	@Before()
 	public void setup() {
@@ -29,7 +30,7 @@ public class StepDefinition {
 
 	@Given("^I navigate to the weather page$")
 	public void navigate() {
-		driver.get("https://weather-acceptance.herokuapp.com/");
+		driver.get(targetUrl);
 	}
 
 	@When("^I do nothing else$")
