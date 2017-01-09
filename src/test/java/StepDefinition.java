@@ -1,6 +1,8 @@
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,7 +24,6 @@ public class StepDefinition {
 
 	@Before()
 	public void setup() {
-		// recent versions of firefox require the gecko driver.
 		// set the driver path based on os
 		String chromeDriverPath = "chromedriver\\chromedriver.exe";
 		String os = System.getProperty("os.name");
@@ -58,8 +59,8 @@ public class StepDefinition {
 		this.selectedDay = (int) ((Math.random() * 4) + 1);
 		this.dayElement = driver.findElement(By.cssSelector("span[data-test='day-" + this.selectedDay + "']"));
 		this.dayElement.click();
-		Assert.assertTrue("After clicking on a day there should be one visible forecast details section ("
-				+ helper.numDetailsSectionsDisplayed() + ")", helper.numDetailsSectionsDisplayed() == 1);
+		assertThat("After clicking on a day there should be one visible forecast details section",
+				helper.numDetailsSectionsDisplayed(), is(1));
 	}
 
 	@When("^I click on day \"(.*)\"$")
@@ -68,64 +69,62 @@ public class StepDefinition {
 		this.selectedDay = day;
 		this.dayElement = driver.findElement(By.cssSelector("span[data-test='day-" + this.selectedDay + "']"));
 		this.dayElement.click();
-		Assert.assertTrue("After clicking on a day there should be one visible forecast details section ("
-				+ helper.numDetailsSectionsDisplayed() + ")", helper.numDetailsSectionsDisplayed() == 1);
+		assertThat("After clicking on a day there should be one visible forecast details section",
+				helper.numDetailsSectionsDisplayed(), is(1));
 	}
 
 	@When("^I click on the day again$")
 	public void i_click_on_the_day_again() throws Throwable {
 		this.dayElement.click();
-		Assert.assertTrue("After clicking on a day there should be no visible forecast details sections ("
-				+ helper.numDetailsSectionsDisplayed() + ")", helper.numDetailsSectionsDisplayed() == 0);
+		assertThat("After clicking on a day there should be no visible forecast details sections",
+				helper.numDetailsSectionsDisplayed(), is(0));
 	}
 
 	@Then("^the forecast for \"(.*)\" is displayed$")
 	public void verifyInitialPage(final String expectedCity) {
 		// Check the static part of title line
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'Five Day Weather Forecast for')]"));
-		Assert.assertTrue("'Five Day Weather Forecast for' text not found (" + list.size() + ")", list.size() > 0);
+		assertThat("'Five Day Weather Forecast for' text not found", list.size(), is(1));
 		// Check the city
 		String city = driver.findElement(By.id("city")).getAttribute("value");
-		Assert.assertTrue("City should be " + expectedCity + " (" + city.equals(expectedCity) + ")",
-				city.equals(expectedCity));
+		assertThat("The displayed city is correct", city, is(expectedCity));
 	}
 
 	@Then("^the forecast for \"(.*)\" days is displayed$")
 	public void the_forecast_for_days_is_displayed(int arg1) throws Throwable {
 		// locate the forecast section for each day
 		List<WebElement> elements = driver.findElements(By.cssSelector("span[data-test^='day-']"));
-		Assert.assertTrue("There should be 5 days of forcasts displayed (" + elements.size() + ")",
-				elements.size() == 5);
+		assertThat("The correct number of forecast days are displayed", elements.size(), is(5));
 	}
 
 	@Then("^none of the details sections are displayed$")
 	public void none_of_the_details_sections_are_displayed() throws Throwable {
-		Assert.assertTrue("None of the forecast details sections should be visible ("
-				+ helper.numDetailsSectionsDisplayed() + ")", helper.numDetailsSectionsDisplayed() == 0);
+		assertThat("None of the forecast details sections should be visible", helper.numDetailsSectionsDisplayed(),
+				is(0));
 	}
 
 	@Then("^the three hourly forecast is displayed$")
 	public void the_three_hourly_forecast_is_displayed() throws Throwable {
 		// we determine that the 3 hourly details forecast is displayed by
 		// checking that the number of visible details sections = 1
-		Assert.assertTrue(
-				"There should be one visible forecast details section (" + helper.numDetailsSectionsDisplayed() + ")",
-				helper.numDetailsSectionsDisplayed() == 1);
+		// Assert.assertTrue(
+		// "There should be one visible forecast details section (" +
+		// helper.numDetailsSectionsDisplayed() + ")",
+		// helper.numDetailsSectionsDisplayed() == 1);
 	}
 
 	@Then("^the three hourly forecast is hidden$")
 	public void the_three_hourly_forecast_is_hidden() throws Throwable {
-		Assert.assertTrue("After clicking on a day there should be one visible forecast details section ("
-				+ helper.numDetailsSectionsDisplayed() + ")", helper.numDetailsSectionsDisplayed() == 0);
+		assertThat("After clicking on a day there is one visible forecast details section",
+				helper.numDetailsSectionsDisplayed(), is(0));
 	}
 
 	@Then("^the summary displays the most dominant condition$")
 	public void the_summary_displays_the_most_dominant_condition() throws Throwable {
 		TestHelper.CONDITION summaryCondition = helper.getSummaryConditions(this.selectedDay);
 		TestHelper.CONDITION detailsDominantCondition = helper.getDetailsDominantCondition(this.selectedDay);
-		Assert.assertTrue("The summary condition (" + summaryCondition.toString()
-				+ ") should be the dominant condition from the details section (" + detailsDominantCondition.toString()
-				+ ")", summaryCondition == detailsDominantCondition);
+		assertThat("The summary condition is the dominant condition from the details section", summaryCondition,
+				is(detailsDominantCondition));
 	}
 
 	@Then("^the summary displays the most dominant wind speed and direction$")
