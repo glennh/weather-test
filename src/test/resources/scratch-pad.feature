@@ -1,9 +1,8 @@
 @scratchPad
-Feature: Scenario scratch-pad
+Feature: ScratchPad
 
-Scenario: Expand day when another day is already expanded
+Scenario: ScratchPad
 Given I navigate to the weather page
-And I have clicked on a day
-When I click on a different day
-Then the first day is closed
-And the three hourly forecast is displayed for the most recently clicked day
+When I click on day "2"
+Then the three hourly forecast is displayed 
+And the summary displays the most dominant wind speed and direction

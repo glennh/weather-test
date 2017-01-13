@@ -18,7 +18,8 @@ import cucumber.api.java.en.When;
 public class StepDefinition {
 	private WebDriver driver;
 	private WebElement dayElement;
-	private String targetUrl = "https://weather-acceptance.herokuapp.com/";
+	// private String targetUrl = "https://weather-acceptance.herokuapp.com/";
+	private String targetUrl = "http://localhost:3000/";
 	private TestHelper helper;
 	private int selectedDay;
 
@@ -127,8 +128,15 @@ public class StepDefinition {
 				is(detailsDominantCondition));
 	}
 
-	@Then("^the summary displays the most dominant wind speed and direction$")
-	public void the_summary_displays_the_most_dominant_wind_speed_and_direction() throws Throwable {
+	@Then("^the summary displays the most dominant wind speed$")
+	public void the_summary_displays_the_most_dominant_wind_speed() throws Throwable {
+		String summaryWindSpeed = helper.getSummaryWindSpeed(this.selectedDay);
+		String dominantWindSpeed = helper.getDominantWindSpeed(this.selectedDay).toString();
+		assertThat(summaryWindSpeed, is(dominantWindSpeed));
+	}
+
+	@Then("^the summary displays the most dominant wind direction$")
+	public void the_summary_displays_the_most_dominant_wind_direction() throws Throwable {
 		// Write code here that turns the phrase above into concrete actions
 		throw new PendingException();
 	}
