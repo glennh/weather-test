@@ -18,8 +18,8 @@ import cucumber.api.java.en.When;
 public class StepDefinition {
 	private WebDriver driver;
 	private WebElement dayElement;
-	// private String targetUrl = "https://weather-acceptance.herokuapp.com/";
-	private String targetUrl = "http://localhost:3000/";
+	private String targetUrl = "https://weather-acceptance.herokuapp.com/";
+	// private String targetUrl = "http://localhost:3000/";
 	private TestHelper helper;
 	private int selectedDay;
 

@@ -51,6 +51,16 @@
 				<version>2.19.1</version>
 				<configuration>
 					<excludes>
+						<exclude>**/*CucumberRunner.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<excludes>
 						<exclude>none</exclude>
 					</excludes>
 					<includes>
@@ -58,6 +68,20 @@
 						<include>**/*CucumberRunner.java</include>
 					</includes>
 				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
