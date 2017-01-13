@@ -16,6 +16,7 @@ https://github.com/buildit/acceptance-testing and updating the value of targetUr
 * git
 * maven
 * chrome browser
+* java 8
   
 ### Running the tests
 * Clone the repo to a local folder
