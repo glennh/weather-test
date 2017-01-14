@@ -65,7 +65,7 @@ public class StepDefinition {
 	}
 
 	@When("^I click on day \"(.*)\"$")
-	public void i_click_on_day(final Integer day) throws Throwable {
+	public void i_click_on_day(final int day) throws Throwable {
 		// click on the specified day
 		this.selectedDay = day;
 		this.dayElement = driver.findElement(By.cssSelector("span[data-test='day-" + this.selectedDay + "']"));
@@ -130,8 +130,8 @@ public class StepDefinition {
 
 	@Then("^the summary displays the most dominant wind speed$")
 	public void the_summary_displays_the_most_dominant_wind_speed() throws Throwable {
-		String summaryWindSpeed = helper.getSummaryWindSpeed(this.selectedDay);
-		String dominantWindSpeed = helper.getDominantWindSpeed(this.selectedDay).toString();
+		int summaryWindSpeed = helper.getSummaryWindSpeed(this.selectedDay);
+		int dominantWindSpeed = helper.getDominantWindSpeed(this.selectedDay);
 		assertThat(summaryWindSpeed, is(dominantWindSpeed));
 	}
 
@@ -143,8 +143,9 @@ public class StepDefinition {
 
 	@Then("^the summary displays the aggregate rainfall$")
 	public void the_summary_displays_the_aggregate_rainfall() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		int summaryRainfall = helper.getSummaryRainfall(this.selectedDay);
+		int aggregateRainfall = helper.getAggregateRainfall(this.selectedDay);
+		assertThat(summaryRainfall, is(aggregateRainfall));
 	}
 
 	@Then("^the summary displays the min and max temperatures$")

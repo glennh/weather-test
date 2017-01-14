@@ -45,7 +45,7 @@ public class TestHelper {
 	}
 
 	// Gets the weather conditions for the day summary
-	public CONDITION getSummaryConditions(Integer day) {
+	public CONDITION getSummaryConditions(int day) {
 		// to ensure we get the condition for the day summary and not the day
 		// details we search for the specific description-day label
 		WebElement conditionElement = driver.findElement(By.cssSelector("svg[data-test='description-" + day + "']"));
@@ -54,7 +54,7 @@ public class TestHelper {
 	}
 
 	// Gets the weather conditions for the day expanded details
-	public List<CONDITION> getDetailsConditions(Integer day) {
+	public List<CONDITION> getDetailsConditions(int day) {
 		List<CONDITION> conditions = new ArrayList<CONDITION>();
 		// a key element of the selenium selector is the final '-'. This ensures
 		// we only get the conditions for the detail elements and not for the
@@ -78,7 +78,7 @@ public class TestHelper {
 	// Now I think it may be the most common weather condition of the day. In a
 	// real situation I'd ask a product owner
 	// or SME. I'm going to leave the current implementation in place.)
-	public CONDITION getDetailsDominantCondition(Integer day) {
+	public CONDITION getDetailsDominantCondition(int day) {
 		CONDITION dominantCondition;
 		List<CONDITION> conditions = getDetailsConditions(day);
 
@@ -97,16 +97,19 @@ public class TestHelper {
 	}
 
 	// Gets the wind speed for the day summary
-	public String getSummaryWindSpeed(Integer day) {
+	public int getSummaryWindSpeed(int day) {
 		// to ensure we get the wind speed for the day summary and not the day
 		// details we search for the specific description-day label
 		WebElement windSpeedElement = driver.findElement(By.cssSelector("span[data-test='speed-" + day + "']"));
 		String windSpeed = windSpeedElement.getText().replaceAll("kph", "");
-		return windSpeed;
+		// Convert the wind speed to an integer. If we've got a value for
+		// wind speed that's not an int an error will be thrown... thats
+		// what we want.
+		return Integer.parseInt(windSpeed);
 	}
 
 	// Gets the wind speeds for the day expanded details
-	public List<Integer> getWindSpeeds(Integer day) {
+	public List<Integer> getWindSpeeds(int day) {
 		List<Integer> windSpeeds = new ArrayList<Integer>();
 		// a key element of the selenium selector is the final '-'. This ensures
 		// we only get the wind speed for the detail elements and not for the
@@ -128,17 +131,47 @@ public class TestHelper {
 	// speeds
 	// with the same number of occurrences we use the average of those values.
 	// (this approach needs to be agreed by product owner / SME)
-	public Integer getDominantWindSpeed(Integer day) {
+	public int getDominantWindSpeed(int day) {
 		List<Integer> windSpeeds = getWindSpeeds(day);
 		return getDominantValue(windSpeeds);
 	}
 
+	// Gets the summary rainfall
+	public int getSummaryRainfall(int day) {
+		// to ensure we get the railfall for the day summary and not the day
+		// details we search for the specific description-day label
+		WebElement rainfallElement = driver.findElement(By.cssSelector("span[data-test='rainfall-" + day + "']"));
+		String rainfall = rainfallElement.getText().replaceAll("mm", "");
+		// Convert the rainfall to an integer. If we've got a value for
+		// wind speed that's not an int an error will be thrown... thats
+		// what we want.
+		return Integer.parseInt(rainfall);
+	}
+
+	// Gets the aggregate rainfall for the day expanded details
+	public int getAggregateRainfall(int day) {
+		int aggregateRainfall = 0;
+		// a key element of the selenium selector is the final '-'. This ensures
+		// we only get the rainfall for the detail elements and not for the
+		// summary
+		List<WebElement> rainfallElements = driver
+				.findElements(By.cssSelector("span[data-test^='rainfall-" + day + "-']"));
+		for (WebElement rainfallElement : rainfallElements) {
+			String rainfall = rainfallElement.getText().replaceAll("mm", "");
+			// Convert the rainfall to an integer. If we've got a value for
+			// wind speed that's not an int an error will be thrown... thats
+			// what we want.
+			aggregateRainfall += Integer.parseInt(rainfall);
+		}
+		return aggregateRainfall;
+	}
+
 	// Gets the dominant value of a list of integers
-	public Integer getDominantValue(List<Integer> values) {
+	public int getDominantValue(List<Integer> values) {
 		// Find the most common element
 		// Create a hash of value <> number of times the value occurs
 		Map<Integer, Integer> occurances = new HashMap<Integer, Integer>();
-		for (Integer windSpeed : values) {
+		for (int windSpeed : values) {
 			int count = occurances.containsKey(windSpeed) ? occurances.get(windSpeed) : 0;
 			occurances.put(windSpeed, count + 1);
 		}
@@ -154,7 +187,7 @@ public class TestHelper {
 		// than one)
 		List<Integer> maxWindSpeeds = new ArrayList<Integer>();
 		for (Map.Entry<Integer, Integer> entrySet : occurances.entrySet()) {
-			Integer windSpeed = entrySet.getKey();
+			int windSpeed = entrySet.getKey();
 			int occurences = entrySet.getValue();
 			if (occurences == maxOcurrences) {
 				maxWindSpeeds.add(windSpeed);
@@ -162,7 +195,8 @@ public class TestHelper {
 		}
 		// Now we need the average value of the wind speeds with max occurrence
 		// Casting to int will round down... that's what we want
-		Integer dominantWindSpeed = (int) maxWindSpeeds.stream().mapToInt(i -> i).average().orElse(0);
+		int dominantWindSpeed = (int) maxWindSpeeds.stream().mapToInt(i -> i).average().orElse(0);
 		return dominantWindSpeed;
 	}
+
 }
