@@ -30,14 +30,14 @@ Given I navigate to the weather page
 When I click on day "2"
 Then the summary displays the most dominant wind speed
 
+# How do we calculate dominant wind direction?  
+# I found some data here: http://math.stackexchange.com/questions/44621/calculate-average-wind-direction.
+# The app seems to be displaying the first wind value from the day details as the summary wind direction.
+# I need some conversation with the product owner or SME before implementing dominant wind direction checking.
 Scenario: Check the summary dominant wind direction
 Given I navigate to the weather page
 When I click on day "2"
 Then the summary displays the most dominant wind direction 
-# How do we calculate wind direction?  
-# I found some data here: http://math.stackexchange.com/questions/44621/calculate-average-wind-direction.
-# The app seems to be displaying the first wind value from the day details as the summary wind direction.
-# I need some conversation with the product owner or SME before implementing dominant wind direction checking.
 
 Scenario: Check the summary aggregate rainfall
 Given I navigate to the weather page
