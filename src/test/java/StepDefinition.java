@@ -25,7 +25,7 @@ public class StepDefinition {
 
 	@Before()
 	public void setup() {
-		// set the driver path based on os
+		// Set the driver path based on os.
 		String chromeDriverPath = "chromedriver\\chromedriver.exe";
 		String os = System.getProperty("os.name");
 		if (os.contains("Mac")) {
@@ -56,7 +56,7 @@ public class StepDefinition {
 
 	@When("^I click on a day at random$")
 	public void i_click_on_a_day() throws Throwable {
-		// click on any one of the days
+		// Click on any one of the days.
 		this.selectedDay = (int) ((Math.random() * 4) + 1);
 		this.dayElement = driver.findElement(By.cssSelector("span[data-test='day-" + this.selectedDay + "']"));
 		this.dayElement.click();
@@ -83,17 +83,17 @@ public class StepDefinition {
 
 	@Then("^the forecast for \"(.*)\" is displayed$")
 	public void verifyInitialPage(final String expectedCity) {
-		// Check the static part of title line
+		// Check the static part of title line.
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'Five Day Weather Forecast for')]"));
 		assertThat("'Five Day Weather Forecast for' text not found", list.size(), is(1));
-		// Check the city
+		// Check the city.
 		String city = driver.findElement(By.id("city")).getAttribute("value");
 		assertThat("The displayed city is correct", city, is(expectedCity));
 	}
 
 	@Then("^the forecast for \"(.*)\" days is displayed$")
 	public void the_forecast_for_days_is_displayed(int arg1) throws Throwable {
-		// locate the forecast section for each day
+		// Locate the forecast section for each day.
 		List<WebElement> elements = driver.findElements(By.cssSelector("span[data-test^='day-']"));
 		assertThat("The correct number of forecast days are displayed", elements.size(), is(5));
 	}
@@ -106,12 +106,9 @@ public class StepDefinition {
 
 	@Then("^the three hourly forecast is displayed$")
 	public void the_three_hourly_forecast_is_displayed() throws Throwable {
-		// we determine that the 3 hourly details forecast is displayed by
-		// checking that the number of visible details sections = 1
-		// Assert.assertTrue(
-		// "There should be one visible forecast details section (" +
-		// helper.numDetailsSectionsDisplayed() + ")",
-		// helper.numDetailsSectionsDisplayed() == 1);
+		// We determine that the 3 hourly details forecast is displayed by
+		// checking that the number of visible details sections = 1.
+		assertThat(helper.numDetailsSectionsDisplayed(), is(1));
 	}
 
 	@Then("^the three hourly forecast is hidden$")
