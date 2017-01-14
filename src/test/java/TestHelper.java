@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,21 +18,21 @@ public class TestHelper {
 	private Map<TestHelper.CONDITION, Integer> conditionPriorities = new HashMap<TestHelper.CONDITION, Integer>();
 
 	public TestHelper() {
-		// this constructor is only used when unit testing the non selenium
+		// This constructor is only used when unit testing the non selenium
 		// functions in this class.
 	}
 
 	public TestHelper(WebDriver driver) {
 		this.driver = driver;
 
-		// initialise the conditions priorities
+		// Initialise the weather conditions priorities.
 		this.conditionPriorities.put(CONDITION.RAIN, 1);
 		this.conditionPriorities.put(CONDITION.CLOUDS, 2);
 
 	}
 
 	// Counts the number of visible details sections based on the height of
-	// the 'details' div
+	// the 'details' div.
 	public int numDetailsSectionsDisplayed() {
 		List<WebElement> detailsDiv = driver.findElements(By.cssSelector("div[class='details']"));
 		int numVisibleDetails = 0;
@@ -44,21 +45,21 @@ public class TestHelper {
 		return numVisibleDetails;
 	}
 
-	// Gets the weather conditions for the day summary
+	// Gets the weather conditions for the day summary.
 	public CONDITION getSummaryConditions(int day) {
-		// to ensure we get the condition for the day summary and not the day
-		// details we search for the specific description-day label
+		// To ensure we get the condition for the day summary and not the day
+		// details we search for the specific description-day label.
 		WebElement conditionElement = driver.findElement(By.cssSelector("svg[data-test='description-" + day + "']"));
 		String condition = conditionElement.getAttribute("aria-label");
 		return CONDITION.valueOf(condition.toUpperCase());
 	}
 
-	// Gets the weather conditions for the day expanded details
+	// Gets the weather conditions for the day expanded details.
 	public List<CONDITION> getDetailsConditions(int day) {
 		List<CONDITION> conditions = new ArrayList<CONDITION>();
-		// a key element of the selenium selector is the final '-'. This ensures
+		// A key element of the selenium selector is the final '-'. This ensures
 		// we only get the conditions for the detail elements and not for the
-		// summary
+		// summary.
 		List<WebElement> conditionElements = driver
 				.findElements(By.cssSelector("svg[data-test^='description-" + day + "-']"));
 		for (WebElement conditionElement : conditionElements) {
@@ -82,7 +83,7 @@ public class TestHelper {
 		CONDITION dominantCondition;
 		List<CONDITION> conditions = getDetailsConditions(day);
 
-		// initialise the dominant condition to the first one in the list.
+		// Initialise the dominant condition to the first one in the list.
 		dominantCondition = conditions.get(0);
 		int priority = this.conditionPriorities.get(conditions.get(0));
 
@@ -96,10 +97,10 @@ public class TestHelper {
 		return dominantCondition;
 	}
 
-	// Gets the wind speed for the day summary
+	// Gets the wind speed for the day summary.
 	public int getSummaryWindSpeed(int day) {
-		// to ensure we get the wind speed for the day summary and not the day
-		// details we search for the specific description-day label
+		// To ensure we get the wind speed for the day summary and not the day
+		// details we search for the specific description-day label.
 		WebElement windSpeedElement = driver.findElement(By.cssSelector("span[data-test='speed-" + day + "']"));
 		String windSpeed = windSpeedElement.getText().replaceAll("kph", "");
 		// Convert the wind speed to an integer. If we've got a value for
@@ -108,12 +109,12 @@ public class TestHelper {
 		return Integer.parseInt(windSpeed);
 	}
 
-	// Gets the wind speeds for the day expanded details
+	// Gets the wind speeds for the day expanded details.
 	public List<Integer> getWindSpeeds(int day) {
 		List<Integer> windSpeeds = new ArrayList<Integer>();
-		// a key element of the selenium selector is the final '-'. This ensures
+		// A key element of the selenium selector is the final '-'. This ensures
 		// we only get the wind speed for the detail elements and not for the
-		// summary
+		// summary.
 		List<WebElement> windSpeedElements = driver
 				.findElements(By.cssSelector("span[data-test^='speed-" + day + "-']"));
 		for (WebElement windSpeedElement : windSpeedElements) {
@@ -138,8 +139,8 @@ public class TestHelper {
 
 	// Gets the summary rainfall
 	public int getSummaryRainfall(int day) {
-		// to ensure we get the railfall for the day summary and not the day
-		// details we search for the specific description-day label
+		// To ensure we get the railfall for the day summary and not the day
+		// details we search for the specific description-day label.
 		WebElement rainfallElement = driver.findElement(By.cssSelector("span[data-test='rainfall-" + day + "']"));
 		String rainfall = rainfallElement.getText().replaceAll("mm", "");
 		// Convert the rainfall to an integer. If we've got a value for
@@ -148,12 +149,12 @@ public class TestHelper {
 		return Integer.parseInt(rainfall);
 	}
 
-	// Gets the aggregate rainfall for the day expanded details
+	// Gets the aggregate rainfall for the day expanded details.
 	public int getAggregateRainfall(int day) {
 		int aggregateRainfall = 0;
-		// a key element of the selenium selector is the final '-'. This ensures
+		// A key element of the selenium selector is the final '-'. This ensures
 		// we only get the rainfall for the detail elements and not for the
-		// summary
+		// summary.
 		List<WebElement> rainfallElements = driver
 				.findElements(By.cssSelector("span[data-test^='rainfall-" + day + "-']"));
 		for (WebElement rainfallElement : rainfallElements) {
@@ -164,6 +165,63 @@ public class TestHelper {
 			aggregateRainfall += Integer.parseInt(rainfall);
 		}
 		return aggregateRainfall;
+	}
+
+	// Gets the summary maximum and minimum temperatures as a string: max,min.
+	public String getSummaryTemps(int day) {
+		WebElement maxTempElement = driver.findElement(By.cssSelector("span[data-test='maximum-" + day + "']"));
+		WebElement minTempElement = driver.findElement(By.cssSelector("span[data-test='minimum-" + day + "']"));
+
+		String maxTemp = maxTempElement.getText();
+		// remove the degree symbol
+		maxTemp = maxTemp.substring(0, maxTemp.length() - 1);
+
+		String minTemp = minTempElement.getText();
+		// remove the degree symbol
+		minTemp = minTemp.substring(0, minTemp.length() - 1);
+
+		return maxTemp + "," + minTemp;
+	}
+
+	// Gets the highest
+	public String getDayMayMinTemps(int day) {
+		List<WebElement> maxTempElements = driver
+				.findElements(By.cssSelector("span[data-test^='maximum-" + day + "-']"));
+		List<WebElement> minTempElements = driver
+				.findElements(By.cssSelector("span[data-test^='maximum-" + day + "-']"));
+		List<Integer> minTemps = new ArrayList<Integer>();
+		List<Integer> maxTemps = new ArrayList<Integer>();
+
+		// Get max temps as integers'
+		for (WebElement element : maxTempElements) {
+			//
+			String tempString = element.getText();
+			// remove the degree symbol
+			tempString = tempString.substring(0, tempString.length() - 1);
+			// Convert the temperature to an integer. If we've got a value for
+			// that's not an int an error will be thrown... thats
+			// what we want.
+			int temp = Integer.parseInt(tempString);
+			maxTemps.add(temp);
+		}
+
+		// Get min temps as integers
+		for (WebElement element : minTempElements) {
+			//
+			String tempString = element.getText();
+			// remove the degree symbol
+			tempString = tempString.substring(0, tempString.length() - 1);
+			// Convert the temperature to an integer. If we've got a value for
+			// that's not an int an error will be thrown... thats
+			// what we want.
+			int temp = Integer.parseInt(tempString);
+			minTemps.add(temp);
+		}
+
+		// Return the highest max temp and loweest min temp of the day.
+		int maxTemp = Collections.max(maxTemps);
+		int minTemp = Collections.min(minTemps);
+		return maxTemp + "," + minTemp;
 	}
 
 	// Gets the dominant value of a list of integers

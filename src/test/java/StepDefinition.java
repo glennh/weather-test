@@ -147,8 +147,9 @@ public class StepDefinition {
 
 	@Then("^the summary displays the min and max temperatures$")
 	public void the_summary_displays_the_min_and_max_temperatures() throws Throwable {
-		// Write code here that turns the phrase above into concrete actions
-		throw new PendingException();
+		String summaryMaxMinTemps = helper.getSummaryTemps(this.selectedDay);
+		String dayMaxMinTemps = helper.getDayMayMinTemps(this.selectedDay);
+		assertThat(summaryMaxMinTemps, is(dayMaxMinTemps));
 	}
 
 }
